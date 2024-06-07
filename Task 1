@@ -1,0 +1,86 @@
+class Task:
+    def __init__(self, description):
+        self.description = description
+        self.completed = False
+
+    def complete(self):
+        self.completed = True
+
+    def __str__(self):
+        status = "Completed" if self.completed else "Not Completed"
+        return f"{self.description} - {status}"
+
+class TaskManager:
+    def __init__(self):
+        self.tasks = []
+
+    def add_task(self, description):
+        task = Task(description)
+        self.tasks.append(task)
+        return f"Added task: '{description}'"
+
+    def complete_task(self, index):
+        if 0 <= index < len(self.tasks):
+            self.tasks[index].complete()
+            return f"Completed task: '{self.tasks[index].description}'"
+        else:
+            return "Invalid task number"
+
+    def remove_task(self, index):
+        if 0 <= index < len(self.tasks):
+            removed_task = self.tasks.pop(index)
+            return f"Removed task: '{removed_task.description}'"
+        else:
+            return "Invalid task number"
+
+    def list_tasks(self):
+        if not self.tasks:
+            return "No tasks available"
+        else:
+            task_list = "\nTasks:\n" + "\n".join(f"{i}. {task}" for i, task in enumerate(self.tasks, start=1))
+            return task_list
+
+def display_Options():
+    print("\n Options:")
+    print("1. Display To-Do List")
+    print("2. Add Task")
+    print("3. Mark a Task as Completed")
+    print("4. Remove a Task")
+    print("5. Quit")
+
+def main():
+    task_manager = TaskManager()
+
+    while True:
+        display_Options()
+        choice = input("Enter your choice: ")
+
+        if choice == '1':
+            print(task_manager.list_tasks())
+        elif choice == '2':
+            description = input("Enter the task description: ")
+            print(task_manager.add_task(description))
+        elif choice == '3':
+            print(task_manager.list_tasks())
+            if task_manager.tasks:
+                try:
+                    index = int(input("Enter the task number to mark as completed: ")) - 1
+                    print(task_manager.complete_task(index))
+                except ValueError:
+                    print("Invalid input. Please enter a valid task number.")
+        elif choice == '4':
+            print(task_manager.list_tasks())
+            if task_manager.tasks:
+                try:
+                    index = int(input("Enter the task number to remove: ")) - 1
+                    print(task_manager.remove_task(index))
+                except ValueError:
+                    print("Invalid input. Please enter a valid task number.")
+        elif choice == '5':
+            print("Quitting the program. Goodbye!")
+            break
+        else:
+            print("Invalid choice. Please select a valid option.")
+
+if __name__ == "__main__":
+    main()
